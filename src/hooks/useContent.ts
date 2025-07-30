@@ -37,7 +37,10 @@ export function usePageContent(slug: string) {
         return null
       }
     },
-    staleTime: 1000 * 60 * 5, // 5 minutes
+    staleTime: 0, // Always fetch fresh data
+    cacheTime: 1000 * 60 * 2, // Keep in cache for 2 minutes only
+    refetchOnWindowFocus: true, // Refetch when window gains focus
+    refetchOnMount: true, // Always refetch on component mount
   })
 }
 
@@ -54,7 +57,7 @@ export function useUpdatePageContent() {
       const { data, error } = await supabase
         .from('pages')
         .upsert(
-          { slug, content },
+          { slug, content, updated_at: new Date().toISOString() },
           { onConflict: 'slug' }
         )
         .select()
@@ -64,9 +67,15 @@ export function useUpdatePageContent() {
       return data
     },
     onSuccess: (data) => {
-      // Invalidate and refetch the specific page content
+      // Invalidate and refetch the specific page content AND all related queries
       queryClient.invalidateQueries({ queryKey: ['page-content', data.slug] })
-      toast.success('Content updated successfully!')
+      queryClient.refetchQueries({ queryKey: ['page-content', data.slug] })
+
+      // Also invalidate all page content queries to ensure consistency
+      queryClient.invalidateQueries({ queryKey: ['page-content'] })
+
+      toast.success('Content updated successfully! Changes should appear for all users.')
+      console.log('✅ Content updated and cache invalidated for:', data.slug)
     },
     onError: (error: any) => {
       if (error.message.includes('Supabase is not configured')) {
