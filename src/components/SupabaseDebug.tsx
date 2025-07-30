@@ -138,12 +138,15 @@ const SupabaseDebug = () => {
           <p className="text-sm">{connectionStatus}</p>
         </div>
 
-        <div className="flex gap-2">
+        <div className="flex flex-wrap gap-2">
           <Button onClick={testConnection} disabled={loading}>
             {loading ? 'Testing...' : 'Test Connection'}
           </Button>
           <Button onClick={testRealTimeUpdate} variant="outline">
-            Test Update
+            Test Real-time Update
+          </Button>
+          <Button onClick={clearTestData} variant="destructive" size="sm">
+            Clear Test Data
           </Button>
         </div>
 
