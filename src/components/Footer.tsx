@@ -63,20 +63,29 @@ const Footer = () => {
             </div>
           </div>
 
-          {/* Connect */}
+          {/* Legal & Connect */}
           <div className="space-y-4">
             <h4 className="text-lg font-semibold text-light heading-secondary">
+              Legal
+            </h4>
+            <div className="flex flex-col space-y-2">
+              <Link to="/terms-conditions" className="text-light-muted hover:text-light transition-colors text-sm body-text">
+                Terms & Conditions
+              </Link>
+              <Link to="/privacy-policy" className="text-light-muted hover:text-light transition-colors text-sm body-text">
+                Privacy Policy
+              </Link>
+              <Link to="/refund-policy" className="text-light-muted hover:text-light transition-colors text-sm body-text">
+                Refund & Cancellation Policy
+              </Link>
+            </div>
+
+            <h4 className="text-lg font-semibold text-light heading-secondary mt-6">
               Connect
             </h4>
             <div className="flex flex-col space-y-2">
-              <a href="#" className="text-light-muted hover:text-light transition-colors text-sm body-text">
+              <a href="https://www.instagram.com/highagencycollective" target="_blank" rel="noopener noreferrer" className="text-light-muted hover:text-light transition-colors text-sm body-text">
                 Instagram
-              </a>
-              <a href="#" className="text-light-muted hover:text-light transition-colors text-sm body-text">
-                LinkedIn
-              </a>
-              <a href="mailto:hello@awakenherpower.com" className="text-light-muted hover:text-light transition-colors text-sm body-text">
-                Email
               </a>
             </div>
           </div>
