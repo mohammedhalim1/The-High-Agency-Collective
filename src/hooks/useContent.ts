@@ -21,6 +21,7 @@ export function usePageContent(slug: string) {
       }
 
       try {
+        console.log(`🔍 Fetching content for slug: ${slug}`)
         const { data, error } = await supabase
           .from('pages')
           .select('*')
@@ -28,12 +29,24 @@ export function usePageContent(slug: string) {
           .single()
 
         if (error && error.code !== 'PGRST116') { // PGRST116 = not found
+          console.error(`❌ Supabase error for ${slug}:`, error)
           throw error
+        }
+
+        if (data) {
+          console.log(`✅ Successfully fetched content for ${slug}`)
+          console.log('Content preview:', {
+            slug: data.slug,
+            updated_at: data.updated_at,
+            hasContent: !!data.content
+          })
+        } else {
+          console.log(`ℹ️ No content found for ${slug}, will use defaults`)
         }
 
         return data
       } catch (error) {
-        console.warn('Failed to fetch content from Supabase:', error)
+        console.warn(`⚠️ Failed to fetch content from Supabase for ${slug}:`, error)
         return null
       }
     },
