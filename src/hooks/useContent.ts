@@ -136,8 +136,15 @@ export function useRealtimeContent(slug: string) {
             filter: `slug=eq.${slug}`,
           },
           (payload) => {
-            // Invalidate queries when content changes
+            console.log('🔄 Real-time update received for:', slug, payload)
+            // Invalidate and immediately refetch when content changes
             queryClient.invalidateQueries({ queryKey: ['page-content', slug] })
+            queryClient.refetchQueries({ queryKey: ['page-content', slug] })
+
+            // Show a toast notification for real-time updates
+            if (payload.eventType === 'UPDATE') {
+              toast.info('Page content updated! Refreshing...')
+            }
           }
         )
         .subscribe()
