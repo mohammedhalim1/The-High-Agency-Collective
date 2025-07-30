@@ -62,16 +62,23 @@ const SupabaseDebug = () => {
 
   const testRealTimeUpdate = async () => {
     if (!supabase) return;
-    
+
     try {
       const testData = {
-        slug: 'debug-test',
+        slug: 'home',
         content: {
           test: true,
           timestamp: new Date().toISOString(),
-          message: 'This is a real-time test update'
+          message: 'This is a real-time test update from debug panel',
+          hero: {
+            title: "TEST UPDATE - " + new Date().toLocaleTimeString(),
+            subtitle: "If you see this, real-time updates are working!",
+            description: "Updated at " + new Date().toLocaleString()
+          }
         }
       };
+
+      console.log('📤 Sending test update:', testData);
 
       const { data, error } = await supabase
         .from('pages')
@@ -83,13 +90,37 @@ const SupabaseDebug = () => {
         toast.error(`Update failed: ${error.message}`);
       } else {
         console.log('✅ Update successful:', data);
-        toast.success('Update test successful!');
+        toast.success('Update test successful! Check the homepage to see if it updated immediately.');
         // Refresh the table data
         testConnection();
       }
     } catch (error: any) {
       console.error('❌ Update error:', error);
       toast.error(`Update error: ${error.message}`);
+    }
+  };
+
+  const clearTestData = async () => {
+    if (!supabase) return;
+
+    try {
+      // Reset home page to remove test data
+      const { error } = await supabase
+        .from('pages')
+        .delete()
+        .eq('slug', 'home');
+
+      if (error) {
+        console.error('❌ Clear failed:', error);
+        toast.error(`Clear failed: ${error.message}`);
+      } else {
+        console.log('✅ Test data cleared');
+        toast.success('Test data cleared! Homepage will now show default content.');
+        testConnection();
+      }
+    } catch (error: any) {
+      console.error('❌ Clear error:', error);
+      toast.error(`Clear error: ${error.message}`);
     }
   };
 
