@@ -69,6 +69,27 @@ const App = () => (
                 <Footer />
               </div>
             } />
+            <Route path="/terms-conditions" element={
+              <div className="min-h-screen bg-background">
+                <Navigation />
+                <TermsConditions />
+                <Footer />
+              </div>
+            } />
+            <Route path="/privacy-policy" element={
+              <div className="min-h-screen bg-background">
+                <Navigation />
+                <PrivacyPolicy />
+                <Footer />
+              </div>
+            } />
+            <Route path="/refund-policy" element={
+              <div className="min-h-screen bg-background">
+                <Navigation />
+                <RefundPolicy />
+                <Footer />
+              </div>
+            } />
 
             {/* Admin Routes */}
                         <Route path="/admin/*" element={
