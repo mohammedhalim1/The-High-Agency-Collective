@@ -1,0 +1,253 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Raleway:wght@300;400;500;600&family=Roboto:wght@300;400;500;600&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* New Color Palette and Font System */
+
+@layer base {
+  :root {
+    /* Backgrounds */
+    --background: #E2CDB3;
+    --card-background-start: #B47A5A;
+    --card-background-end: #DCC5A8;
+    --overlay: rgba(0, 0, 0, 0.4);
+
+    /* Text Colors */
+    --text-primary: #000000;
+    --text-light: #FFFFFF;
+    --text-light-muted: rgba(255, 255, 255, 0.8);
+
+    /* Buttons & Accents */
+    --button-primary: #B47A5A;
+    --button-shadow: rgba(180, 122, 90, 0.4);
+
+    /* Gradients */
+    --gradient-primary: linear-gradient(135deg, #B47A5A 0%, #DCC5A8 100%);
+    --gradient-secondary: linear-gradient(to bottom right, #B47A5A, #DCC5A8);
+
+    /* Tailwind compatible HSL values for shadcn components */
+    --foreground: 0 0% 0%;                    /* Black text */
+    --card: 34 29% 84%;                       /* Card background equivalent */
+    --card-foreground: 0 0% 0%;
+    --popover: 34 29% 84%;
+    --popover-foreground: 0 0% 0%;
+    --primary: 24 35% 52%;                    /* Button primary equivalent */
+    --primary-foreground: 0 0% 100%;
+    --secondary: 34 29% 84%;
+    --secondary-foreground: 0 0% 0%;
+    --muted: 34 29% 84%;
+    --muted-foreground: 0 0% 40%;
+    --accent: 34 29% 84%;
+    --accent-foreground: 0 0% 0%;
+    --destructive: 0 70% 50%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 34 29% 70%;
+    --input: 34 29% 84%;
+    --ring: 24 35% 52%;
+    --radius: 1rem;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    background: var(--background);
+    color: var(--text-primary);
+    font-family: 'Roboto', sans-serif;
+    scroll-behavior: smooth;
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  /* Heading fonts */
+  h1, h2, h3 {
+    font-family: 'Playfair Display', serif;
+    color: var(--text-primary);
+    font-weight: 600;
+  }
+
+  /* Subheading fonts */
+  h4, h5, h6 {
+    font-family: 'Raleway', sans-serif;
+    color: var(--text-primary);
+    font-weight: 500;
+  }
+
+  /* UI text fonts */
+  p, span, button, input, label {
+    font-family: 'Roboto', sans-serif;
+  }
+}
+
+@layer components {
+  /* Button styles with new palette */
+  .primary-button {
+    @apply inline-flex items-center justify-center rounded-full px-6 py-3;
+    background: var(--button-primary);
+    color: var(--text-light);
+    font-family: 'Roboto', sans-serif;
+    font-weight: 500;
+    box-shadow: 0 4px 12px var(--button-shadow);
+    transition: all 0.3s ease;
+    border: none;
+    outline: none;
+  }
+
+  .primary-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px var(--button-shadow);
+  }
+
+  .cta-button {
+    @apply inline-flex items-center justify-center rounded-full px-8 py-4;
+    background: var(--gradient-primary);
+    color: var(--text-light);
+    font-family: 'Roboto', sans-serif;
+    font-weight: 500;
+    box-shadow: 0 6px 16px var(--button-shadow);
+    transition: all 0.3s ease;
+    border: none;
+    outline: none;
+  }
+
+  .cta-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px var(--button-shadow);
+  }
+
+  .secondary-button {
+    @apply inline-flex items-center justify-center rounded-full px-6 py-3;
+    background: transparent;
+    color: var(--button-primary);
+    font-family: 'Roboto', sans-serif;
+    font-weight: 500;
+    border: 2px solid var(--button-primary);
+    transition: all 0.3s ease;
+    outline: none;
+  }
+
+  .secondary-button:hover {
+    background: var(--button-primary);
+    color: var(--text-light);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px var(--button-shadow);
+  }
+
+  /* Card styles with gradients */
+  .elegant-card {
+    background: var(--gradient-primary);
+    border-radius: 1.5rem;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    overflow: hidden;
+  }
+
+  .elegant-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.15);
+  }
+
+  .card-content {
+    background: var(--gradient-secondary);
+    color: var(--text-light);
+    padding: 2rem;
+  }
+
+  .card-white {
+    background: var(--text-light);
+    color: var(--text-primary);
+    border-radius: 1.5rem;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+  }
+
+  .card-white:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.15);
+  }
+
+  /* Hero sections */
+  .hero-gradient {
+    background: var(--gradient-primary);
+    color: var(--text-light);
+  }
+
+  /* Text overlay */
+  .text-overlay {
+    background: var(--overlay);
+    color: var(--text-light);
+  }
+
+  /* Navigation and footer styling */
+  .nav-background {
+    background: var(--text-light);
+    border-bottom: 1px solid var(--card-background-end);
+  }
+
+  .footer-background {
+    background: var(--gradient-secondary);
+    color: var(--text-light);
+  }
+}
+
+@layer utilities {
+  .animate-fade-in {
+    animation: fade-in 0.8s ease-out forwards;
+  }
+
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .section-divider {
+    background: linear-gradient(135deg, var(--card-background-end), var(--background));
+  }
+
+  /* Logo styling */
+  .logo-rounded {
+    border-radius: 0.75rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+
+  /* Text utilities */
+  .text-gradient {
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .heading-primary {
+    font-family: 'Playfair Display', serif;
+    color: var(--text-primary);
+  }
+
+  .heading-secondary {
+    font-family: 'Raleway', sans-serif;
+    color: var(--text-primary);
+  }
+
+  .body-text {
+    font-family: 'Roboto', sans-serif;
+    color: var(--text-primary);
+  }
+
+  .text-light {
+    color: var(--text-light);
+  }
+
+  .text-light-muted {
+    color: var(--text-light-muted);
+  }
+}
