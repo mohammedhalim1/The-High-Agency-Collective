@@ -2,15 +2,16 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
-import { 
-  Home, 
-  User, 
-  Briefcase, 
-  MessageSquare, 
+import {
+  Home,
+  User,
+  Briefcase,
+  MessageSquare,
   Sparkles,
   Edit,
   Globe
 } from 'lucide-react'
+import SupabaseDebug from '@/components/SupabaseDebug'
 
 const pages = [
   {
