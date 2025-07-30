@@ -21,10 +21,10 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {/* Brand */}
           <div className="space-y-4">
-            <img 
-              src="/assets/Gold HA negative background (1).svg" 
-              alt="Site Logo" 
-                            className="logo-rounded w-24 h-24"
+            <img
+              src="/assets/Gold HA negative background (1).svg"
+              alt="High Agency Collective Logo"
+              className="logo-rounded w-32 h-32"
               onError={(e) => {
                 // Fallback to simple logo if image fails to load
                 e.currentTarget.style.display = 'none';
@@ -33,9 +33,10 @@ const Footer = () => {
               }}
             />
             {/* Fallback logo */}
-                        <div className="hidden w-24 h-24 rounded-xl items-center justify-center" style={{background: 'var(--gradient-primary)'}}>
-              <span className="text-light font-bold text-2xl heading-primary">HA</span>
+            <div className="hidden w-32 h-32 rounded-xl items-center justify-center" style={{background: 'var(--gradient-primary)'}}>
+              <span className="text-light font-bold text-3xl heading-primary">HA</span>
             </div>
+            <h3 className="text-light font-semibold text-lg heading-secondary">High Agency Collective</h3>
             <p className="text-light-muted text-sm leading-relaxed body-text">
               Empowering women to embrace their feminine strength and create lives of purpose, balance, and authentic joy.
             </p>
