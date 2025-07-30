@@ -94,7 +94,9 @@ export default function Dashboard() {
         })}
       </div>
 
-      <div className="mt-8">
+      <div className="mt-8 space-y-6">
+        <SupabaseDebug />
+
         <Card>
           <CardHeader>
             <CardTitle>Quick Actions</CardTitle>
@@ -104,9 +106,9 @@ export default function Dashboard() {
           </CardHeader>
           <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <Button variant="outline" asChild>
-              <a 
-                href="https://supabase.com/dashboard" 
-                target="_blank" 
+              <a
+                href="https://supabase.com/dashboard"
+                target="_blank"
                 rel="noopener noreferrer"
               >
                 Open Supabase Dashboard
