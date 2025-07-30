@@ -114,6 +114,18 @@ export function useAutoSave(slug: string, content: any, delay = 2000) {
   return { lastSaved, isSaving }
 }
 
+// Force refresh all content (useful for debugging)
+export function useForceRefresh() {
+  const queryClient = useQueryClient()
+
+  return () => {
+    console.log('🔄 Force refreshing all content...')
+    queryClient.invalidateQueries({ queryKey: ['page-content'] })
+    queryClient.refetchQueries({ queryKey: ['page-content'] })
+    toast.info('Refreshing all content...')
+  }
+}
+
 // Hook to listen for real-time content changes
 export function useRealtimeContent(slug: string) {
   const queryClient = useQueryClient()
