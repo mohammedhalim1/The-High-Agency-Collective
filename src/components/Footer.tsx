@@ -24,7 +24,7 @@ const Footer = () => {
             <img
               src="/assets/Gold HA negative background (1).svg"
               alt="High Agency Collective Logo"
-              className="logo-rounded w-32 h-32"
+              className="logo-rounded w-40 h-40 md:w-48 md:h-48"
               onError={(e) => {
                 // Fallback to simple logo if image fails to load
                 e.currentTarget.style.display = 'none';
@@ -33,8 +33,8 @@ const Footer = () => {
               }}
             />
             {/* Fallback logo */}
-            <div className="hidden w-32 h-32 rounded-xl items-center justify-center" style={{background: 'var(--gradient-primary)'}}>
-              <span className="text-light font-bold text-3xl heading-primary">HA</span>
+            <div className="hidden w-40 h-40 md:w-48 md:h-48 rounded-xl items-center justify-center" style={{background: 'var(--gradient-primary)'}}>
+              <span className="text-light font-bold text-4xl md:text-5xl heading-primary">HA</span>
             </div>
             <h3 className="text-light font-semibold text-lg heading-secondary">High Agency Collective</h3>
             <p className="text-light-muted text-sm leading-relaxed body-text">
