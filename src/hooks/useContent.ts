@@ -88,14 +88,18 @@ export function usePageContent(slug: string) {
         console.groupEnd()
         return data
       } catch (error: any) {
-        console.error(`⚠️ Failed to fetch content from Supabase for ${slug}:`, {
+        console.group(`💥 FETCH EXCEPTION - ${slug}`)
+        console.error('Exception Details:', {
           message: error?.message,
+          name: error?.name,
           code: error?.code,
           details: error?.details,
           hint: error?.hint,
-          stack: error?.stack,
-          fullError: error
+          stack: error?.stack?.split('\n')[0], // First line of stack
+          timestamp: new Date().toISOString()
         })
+        console.error('Full Error Object:', error)
+        console.groupEnd()
         return null
       }
     },
