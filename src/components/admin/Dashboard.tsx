@@ -12,6 +12,7 @@ import {
   Globe
 } from 'lucide-react'
 import SupabaseDebug from '@/components/SupabaseDebug'
+import ErrorTest from '@/components/ErrorTest'
 
 
 const pages = [
