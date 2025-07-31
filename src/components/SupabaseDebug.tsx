@@ -150,6 +150,9 @@ const SupabaseDebug = () => {
           <Button onClick={clearTestData} variant="destructive" size="sm">
             Clear Test Data
           </Button>
+          <Button onClick={testLegalPagesUpdate} variant="secondary" size="sm">
+            Test Legal Pages
+          </Button>
         </div>
 
         {tableData.length > 0 && (
