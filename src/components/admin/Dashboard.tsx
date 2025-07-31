@@ -13,6 +13,7 @@ import {
 } from 'lucide-react'
 import SupabaseDebug from '@/components/SupabaseDebug'
 import ErrorTest from '@/components/ErrorTest'
+import SupabaseFetchVerification from '@/components/SupabaseFetchVerification'
 
 
 const pages = [
