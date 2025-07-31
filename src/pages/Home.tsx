@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import { usePageContent, useRealtimeContent } from '@/hooks/useContent';
 import { Loader2, Star } from 'lucide-react';
 import { HomePageContent, Testimonial, createDefaultHomePageContent } from '@/types/homeContent';
+import PageFetchVerification from '@/components/PageFetchVerification';
 
 const Home = (): JSX.Element => {
   const { data: pageData, isLoading } = usePageContent('home');
