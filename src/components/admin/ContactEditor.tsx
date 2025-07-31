@@ -292,6 +292,19 @@ export default function ContactEditor(): JSX.Element {
               placeholder="Submit button text"
             />
           </div>
+
+          <div>
+            <Label htmlFor="formspree-url">Formspree URL</Label>
+            <Input
+              id="formspree-url"
+              value={content.form.formspreeUrl || defaultContent.form.formspreeUrl}
+              onChange={(e) => updateField('form', 'formspreeUrl', e.target.value)}
+              placeholder="https://formspree.io/f/xvgqqrdl"
+            />
+            <p className="text-sm text-gray-500 mt-1">
+              Your Formspree endpoint URL. If empty, will use the default: {defaultContent.form.formspreeUrl}
+            </p>
+          </div>
         </CardContent>
       </Card>
 
