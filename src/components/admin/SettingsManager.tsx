@@ -22,6 +22,7 @@ export default function SettingsManager() {
   const [isSaving, setSaving] = useState(false);
   const [hasChanges, setHasChanges] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [tableExists, setTableExists] = useState(true);
 
   // Fetch settings from Supabase
   const fetchSettings = async () => {
