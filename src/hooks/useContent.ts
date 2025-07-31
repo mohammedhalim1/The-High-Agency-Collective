@@ -50,28 +50,42 @@ export function usePageContent(slug: string) {
         console.log('📈 Total Count:', count)
 
         if (error && error.code !== 'PGRST116') { // PGRST116 = not found
-          console.error(`❌ Supabase error for ${slug}:`, {
+          console.error('❌ SUPABASE ERROR:', {
+            slug,
+            fetchId,
             message: error.message,
             code: error.code,
             details: error.details,
             hint: error.hint,
+            duration: `${duration.toFixed(2)}ms`,
             fullError: error
           })
+          console.groupEnd()
           throw error
         }
 
         if (data) {
-          console.log(`✅ FRESH content loaded for ${slug} (updated: ${data.updated_at})`)
-          console.log('Fresh content preview:', {
+          console.log('✅ SUCCESS - Data received from Supabase:', {
             slug: data.slug,
+            id: data.id,
             updated_at: data.updated_at,
+            created_at: data.created_at,
             hasContent: !!data.content,
-            fetchedAt: new Date().toISOString()
+            contentSize: data.content ? JSON.stringify(data.content).length : 0,
+            contentKeys: data.content ? Object.keys(data.content) : [],
+            fetchedAt: new Date().toISOString(),
+            duration: `${duration.toFixed(2)}ms`
           })
+          console.log('📄 Raw Content Sample:', data.content ?
+            JSON.stringify(data.content, null, 2).substring(0, 500) + '...' :
+            'No content'
+          )
         } else {
-          console.log(`ℹ️ No content found for ${slug}, will use defaults`)
+          console.log('ℹ️ NO DATA - No content found for slug:', slug)
+          console.log('📝 Will use default fallback content')
         }
 
+        console.groupEnd()
         return data
       } catch (error: any) {
         console.error(`⚠️ Failed to fetch content from Supabase for ${slug}:`, {
