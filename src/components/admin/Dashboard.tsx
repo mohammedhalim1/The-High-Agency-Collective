@@ -9,15 +9,10 @@ import {
   MessageSquare,
   Sparkles,
   Edit,
-  Globe
+  Globe,
+  Settings
 } from 'lucide-react'
-import SupabaseDebug from '@/components/SupabaseDebug'
-import ErrorTest from '@/components/ErrorTest'
-import SupabaseFetchVerification from '@/components/SupabaseFetchVerification'
-import EnvVerification from '@/components/EnvVerification'
-import SupabaseConnectionTest from '@/components/SupabaseConnectionTest'
-import FormspreeTest from '@/components/FormspreeTest'
-
+import SettingsManager from './SettingsManager'
 
 const pages = [
   {
@@ -59,7 +54,8 @@ const pages = [
 
 export default function Dashboard() {
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
+      {/* Header */}
       <div className="flex justify-between items-center">
         <div>
           <h2 className="text-3xl font-bold text-gray-900">Dashboard</h2>
@@ -75,64 +71,74 @@ export default function Dashboard() {
         </Button>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {pages.map((page) => {
-          const Icon = page.icon
-          return (
-            <Card key={page.path} className="hover:shadow-lg transition-shadow">
-              <CardHeader>
-                <div className="flex items-center space-x-2">
-                  <Icon className={`h-6 w-6 ${page.color}`} />
-                  <CardTitle className="text-lg">{page.title}</CardTitle>
-                </div>
-                <CardDescription>{page.description}</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <Button asChild className="w-full">
-                  <Link to={page.path}>
-                    <Edit className="h-4 w-4 mr-2" />
-                    Edit Content
-                  </Link>
-                </Button>
-              </CardContent>
-            </Card>
-          )
-        })}
+      {/* Settings Section */}
+      <SettingsManager />
+
+      {/* Page Management Section */}
+      <div>
+        <div className="flex items-center gap-2 mb-6">
+          <Edit className="h-5 w-5 text-gray-700" />
+          <h3 className="text-xl font-semibold text-gray-900">Content Management</h3>
+        </div>
+        
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {pages.map((page) => {
+            const Icon = page.icon
+            return (
+              <Card key={page.path} className="hover:shadow-lg transition-shadow">
+                <CardHeader>
+                  <div className="flex items-center space-x-2">
+                    <Icon className={`h-6 w-6 ${page.color}`} />
+                    <CardTitle className="text-lg">{page.title}</CardTitle>
+                  </div>
+                  <CardDescription>{page.description}</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <Button asChild className="w-full">
+                    <Link to={page.path}>
+                      <Edit className="h-4 w-4 mr-2" />
+                      Edit Content
+                    </Link>
+                  </Button>
+                </CardContent>
+              </Card>
+            )
+          })}
+        </div>
       </div>
 
-      <div className="mt-8 space-y-6">
-        <FormspreeTest />
-        <EnvVerification />
-        <SupabaseConnectionTest />
-        <SupabaseFetchVerification />
-        <ErrorTest />
-        <SupabaseDebug />
-
-        <Card>
-          <CardHeader>
-            <CardTitle>Quick Actions</CardTitle>
-            <CardDescription>
-              Common tasks and useful links
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <Button variant="outline" asChild>
-              <a
-                href="https://supabase.com/dashboard"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Open Supabase Dashboard
-              </a>
-            </Button>
-            <Button variant="outline" asChild>
-              <Link to="/admin/home">
-                Edit Home Page
-              </Link>
-            </Button>
-          </CardContent>
-        </Card>
-      </div>
+      {/* Quick Actions */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Settings className="h-5 w-5" />
+            Quick Actions
+          </CardTitle>
+          <CardDescription>
+            Useful links and shortcuts
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <Button variant="outline" asChild>
+            <a
+              href="https://supabase.com/dashboard"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Open Supabase Dashboard
+            </a>
+          </Button>
+          <Button variant="outline" asChild>
+            <a
+              href="https://formspree.io"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Manage Contact Forms
+            </a>
+          </Button>
+        </CardContent>
+      </Card>
     </div>
   )
 }
