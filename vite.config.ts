@@ -40,12 +40,10 @@ export default defineConfig(({ mode }) => ({
           ],
           'supabase': ['@supabase/supabase-js', '@supabase/ssr'],
           'query': ['@tanstack/react-query'],
-          'charts': ['recharts'],
           'utils': [
             'clsx',
             'tailwind-merge',
             'class-variance-authority',
-            'date-fns',
             'uuid'
           ]
         }
