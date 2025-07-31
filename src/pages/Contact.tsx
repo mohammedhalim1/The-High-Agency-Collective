@@ -189,9 +189,11 @@ const Contact = (): JSX.Element => {
 
                 <button
                   type="submit"
-                  className="w-full cta-button text-lg"
+                  disabled={isSubmitting}
+                  className="w-full cta-button text-lg disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                 >
-                  {content.form?.submitButtonText || defaultContent.form.submitButtonText}
+                  {isSubmitting && <Loader2 className="h-5 w-5 animate-spin" />}
+                  {isSubmitting ? 'Sending...' : (content.form?.submitButtonText || defaultContent.form.submitButtonText)}
                 </button>
               </form>
             </div>
