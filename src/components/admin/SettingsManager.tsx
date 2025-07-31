@@ -6,6 +6,7 @@ import { Label } from '@/components/ui/label';
 import { Loader2, Save, AlertCircle, CheckCircle } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
 import { toast } from 'sonner';
+import SetupInstructions from './SetupInstructions';
 
 interface Settings {
   analytics_id: string;
