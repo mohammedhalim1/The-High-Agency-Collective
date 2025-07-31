@@ -243,7 +243,7 @@ export default function SettingsManager() {
               type="text"
               value={settings.analytics_id}
               onChange={(e) => handleInputChange('analytics_id', e.target.value)}
-              placeholder="G-XXXXXXXXXX or UA-XXXXXXXXX-X"
+              placeholder="G-P7J6CX2JV8"
               className={`mt-1 ${
                 settings.analytics_id && !isValidAnalyticsId(settings.analytics_id)
                   ? 'border-red-300 focus:border-red-500 focus:ring-red-500'
