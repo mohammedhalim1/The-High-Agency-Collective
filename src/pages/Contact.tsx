@@ -23,6 +23,16 @@ const Contact = (): JSX.Element => {
   // Use content from Supabase or fallback to default
   const content: ContactPageContent = pageData?.content || defaultContent;
 
+  // Log data source for debugging
+  console.log('📞 Contact page rendering with data from:', pageData ? 'Supabase' : 'default fallback');
+  if (pageData) {
+    console.log('📊 Contact data freshness:', {
+      slug: pageData.slug,
+      updated_at: pageData.updated_at,
+      fetched_at: new Date().toISOString()
+    });
+  }
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     // Here you would typically send the form data to your backend
