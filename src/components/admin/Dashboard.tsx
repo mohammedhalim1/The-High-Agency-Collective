@@ -14,6 +14,7 @@ import {
 import SupabaseDebug from '@/components/SupabaseDebug'
 import ErrorTest from '@/components/ErrorTest'
 import SupabaseFetchVerification from '@/components/SupabaseFetchVerification'
+import EnvVerification from '@/components/EnvVerification'
 
 
 const pages = [
