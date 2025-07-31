@@ -50,6 +50,7 @@ const Home = (): JSX.Element => {
 
   return (
     <div className="min-h-screen">
+      <PageFetchVerification slug="home" show={showVerification} />
       {/* Hero Section */}
       <section 
         className="relative h-screen flex items-center justify-center text-center bg-cover bg-center"
