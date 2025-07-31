@@ -11,7 +11,7 @@ import {
   Edit,
   Globe
 } from 'lucide-react'
-import SupabaseDebug from '@/components/SupabaseDebug'
+
 
 const pages = [
   {
