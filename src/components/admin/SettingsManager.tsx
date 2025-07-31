@@ -7,37 +7,7 @@ import { Loader2, Save, AlertCircle, CheckCircle, RefreshCw } from 'lucide-react
 import { supabase } from '@/lib/supabase';
 import { toast } from 'sonner';
 import SetupInstructions from './SetupInstructions';
-
-// Extend the Window interface for TypeScript
-declare global {
-  interface Window {
-    gtagScriptAdded?: boolean;
-    dataLayer?: any[];
-    gtag?: (...args: any[]) => void;
-  }
-}
-
-// Function to dynamically insert Google Analytics script
-const insertAnalyticsScript = (id: string) => {
-  if (!window.gtagScriptAdded && id) {
-    const script1 = document.createElement('script');
-    script1.async = true;
-    script1.src = `https://www.googletagmanager.com/gtag/js?id=${id}`;
-    document.head.appendChild(script1);
-
-    const script2 = document.createElement('script');
-    script2.innerHTML = `
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', '${id}');
-    `;
-    document.head.appendChild(script2);
-
-    window.gtagScriptAdded = true;
-    console.log('Google Analytics script loaded with ID:', id);
-  }
-};
+import { insertAnalyticsScript } from '@/hooks/useGoogleAnalytics';
 
 interface Settings {
   analytics_id: string;
