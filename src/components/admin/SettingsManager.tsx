@@ -256,7 +256,7 @@ export default function SettingsManager() {
               </p>
             ) : (
               <p className="text-sm text-gray-500 mt-1">
-                Your Google Analytics tracking ID (e.g., G-XXXXXXXXXX)
+                Your Google Analytics tracking ID (e.g., G-P7J6CX2JV8)
               </p>
             )}
           </div>
