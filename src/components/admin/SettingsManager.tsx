@@ -252,7 +252,12 @@ export default function SettingsManager() {
 
           <Button
             onClick={saveSettings}
-            disabled={!hasChanges || isSaving}
+            disabled={
+              !hasChanges ||
+              isSaving ||
+              (settings.analytics_id && !isValidAnalyticsId(settings.analytics_id)) ||
+              (settings.site_domain && !isValidDomain(settings.site_domain))
+            }
             className="min-w-[120px]"
           >
             {isSaving && <Loader2 className="h-4 w-4 mr-2 animate-spin" />}
