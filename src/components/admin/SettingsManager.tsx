@@ -114,8 +114,15 @@ export default function SettingsManager() {
         throw error;
       }
 
+      // If analytics_id is provided and valid, load Google Analytics
+      if (settings.analytics_id && isValidAnalyticsId(settings.analytics_id)) {
+        insertAnalyticsScript(settings.analytics_id);
+        toast.success('Settings saved and Google Analytics loaded successfully!');
+      } else {
+        toast.success('Settings saved successfully!');
+      }
+
       setHasChanges(false);
-      toast.success('Settings saved successfully!');
     } catch (err: any) {
       console.error('Failed to save settings:', err);
       setError(err.message);
