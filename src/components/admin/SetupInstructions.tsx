@@ -10,14 +10,13 @@ export default function SetupInstructions() {
 CREATE TABLE IF NOT EXISTS settings (
   id INTEGER PRIMARY KEY DEFAULT 1,
   analytics_id TEXT,
-  site_domain TEXT,
   created_at TIMESTAMPTZ DEFAULT NOW(),
   updated_at TIMESTAMPTZ DEFAULT NOW()
 );
 
 -- Insert default record
-INSERT INTO settings (id, analytics_id, site_domain) 
-VALUES (1, '', '') 
+INSERT INTO settings (id, analytics_id)
+VALUES (1, '')
 ON CONFLICT (id) DO NOTHING;
 
 -- Enable RLS (Row Level Security)
