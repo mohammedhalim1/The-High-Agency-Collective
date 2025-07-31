@@ -10,25 +10,38 @@ const SupabaseDebug = () => {
 
   const testConnection = async () => {
     setLoading(true);
-    
+
     try {
       console.log('🔍 Testing Supabase connection...');
+      console.log('Environment vars:', {
+        url: import.meta.env.VITE_SUPABASE_URL ? 'Set' : 'Missing',
+        key: import.meta.env.VITE_SUPABASE_ANON_KEY ? 'Set' : 'Missing'
+      });
       console.log('Supabase ready:', isSupabaseReady());
       console.log('Supabase client:', supabase);
 
       if (!supabase || !isSupabaseReady()) {
-        setConnectionStatus('❌ Supabase not configured');
+        const status = '❌ Supabase not configured properly';
+        setConnectionStatus(status);
+        console.error(status);
         return;
       }
 
-      // Test 1: Basic table access
+      // Test 1: Basic table access with detailed error logging
+      console.log('Testing basic table access...');
       const { data, error } = await supabase
         .from('pages')
         .select('*');
 
       if (error) {
-        console.error('❌ Error accessing pages table:', error);
-        setConnectionStatus(`❌ Error: ${error.message}`);
+        console.error('❌ Error accessing pages table:', {
+          message: error.message,
+          code: error.code,
+          details: error.details,
+          hint: error.hint,
+          fullError: error
+        });
+        setConnectionStatus(`❌ Error: ${error.message} (Code: ${error.code})`);
         toast.error(`Database error: ${error.message}`);
         return;
       }
@@ -37,24 +50,58 @@ const SupabaseDebug = () => {
       console.log('Table data:', data);
       setTableData(data || []);
       setConnectionStatus(`✅ Connected! Found ${data?.length || 0} records`);
-      
-      // Test fetch specific content
-      const { data: homeData, error: homeError } = await supabase
+
+      // Test 2: Fetch specific content with detailed error logging
+      console.log('Testing specific content fetch...');
+      const testSlugs = ['home', 'about', 'services'];
+
+      for (const slug of testSlugs) {
+        console.log(`Testing fetch for slug: ${slug}`);
+        const { data: pageData, error: pageError } = await supabase
+          .from('pages')
+          .select('*')
+          .eq('slug', slug)
+          .single();
+
+        if (pageError) {
+          if (pageError.code === 'PGRST116') {
+            console.log(`ℹ️ No data found for ${slug} (this is okay)`);
+          } else {
+            console.error(`❌ Error fetching ${slug}:`, {
+              message: pageError.message,
+              code: pageError.code,
+              details: pageError.details,
+              hint: pageError.hint,
+              fullError: pageError
+            });
+          }
+        } else {
+          console.log(`✅ ${slug} data:`, pageData);
+        }
+      }
+
+      // Test 3: Table schema inspection
+      console.log('Inspecting table schema...');
+      const { data: schemaData, error: schemaError } = await supabase
         .from('pages')
         .select('*')
-        .eq('slug', 'home')
-        .single();
+        .limit(1);
 
-      if (homeError && homeError.code !== 'PGRST116') {
-        console.error('❌ Error fetching home:', homeError);
+      if (schemaError) {
+        console.error('Schema inspection failed:', schemaError);
       } else {
-        console.log('✅ Home data:', homeData);
+        console.log('Schema sample:', schemaData);
       }
 
     } catch (error: any) {
-      console.error('❌ Connection test failed:', error);
-      setConnectionStatus(`❌ Failed: ${error.message}`);
-      toast.error(`Connection failed: ${error.message}`);
+      console.error('❌ Connection test failed:', {
+        message: error?.message,
+        name: error?.name,
+        stack: error?.stack,
+        fullError: error
+      });
+      setConnectionStatus(`❌ Failed: ${error?.message || 'Unknown error'}`);
+      toast.error(`Connection failed: ${error?.message || 'Unknown error'}`);
     } finally {
       setLoading(false);
     }
@@ -204,7 +251,7 @@ const SupabaseDebug = () => {
         <div>
           <h3 className="font-semibold mb-2">Environment Check:</h3>
           <ul className="text-sm space-y-1">
-            <li>URL: {import.meta.env.VITE_SUPABASE_URL ? '��� Set' : '❌ Missing'}</li>
+            <li>URL: {import.meta.env.VITE_SUPABASE_URL ? '✅ Set' : '❌ Missing'}</li>
             <li>Key: {import.meta.env.VITE_SUPABASE_ANON_KEY ? '✅ Set' : '❌ Missing'}</li>
             <li>Client Ready: {isSupabaseReady() ? '✅ Yes' : '❌ No'}</li>
           </ul>
