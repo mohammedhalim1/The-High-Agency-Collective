@@ -19,6 +19,16 @@ const Services = (): JSX.Element => {
   const content: ServicesPageContent = pageData?.content || defaultContent;
   const services: Service[] = content.services?.items || defaultContent.services.items;
 
+  // Log data source for debugging
+  console.log('💼 Services page rendering with data from:', pageData ? 'Supabase' : 'default fallback');
+  if (pageData) {
+    console.log('📊 Services data freshness:', {
+      slug: pageData.slug,
+      updated_at: pageData.updated_at,
+      fetched_at: new Date().toISOString()
+    });
+  }
+
   if (isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
