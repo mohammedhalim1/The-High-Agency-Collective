@@ -70,49 +70,63 @@ const App = () => (
             <Route path="/about" element={
               <div className="min-h-screen bg-background">
                 <Navigation />
-                <About />
+                <Suspense fallback={<PageLoader />}>
+                  <About />
+                </Suspense>
                 <Footer />
               </div>
             } />
             <Route path="/services" element={
               <div className="min-h-screen bg-background">
                 <Navigation />
-                <Services />
+                <Suspense fallback={<PageLoader />}>
+                  <Services />
+                </Suspense>
                 <Footer />
               </div>
             } />
             <Route path="/contact" element={
               <div className="min-h-screen bg-background">
                 <Navigation />
-                <Contact />
+                <Suspense fallback={<PageLoader />}>
+                  <Contact />
+                </Suspense>
                 <Footer />
               </div>
             } />
             <Route path="/transform" element={
               <div className="min-h-screen bg-background">
                 <Navigation />
-                <Transform />
+                <Suspense fallback={<PageLoader />}>
+                  <Transform />
+                </Suspense>
                 <Footer />
               </div>
             } />
             <Route path="/terms-conditions" element={
               <div className="min-h-screen bg-background">
                 <Navigation />
-                <TermsConditions />
+                <Suspense fallback={<PageLoader />}>
+                  <TermsConditions />
+                </Suspense>
                 <Footer />
               </div>
             } />
             <Route path="/privacy-policy" element={
               <div className="min-h-screen bg-background">
                 <Navigation />
-                <PrivacyPolicy />
+                <Suspense fallback={<PageLoader />}>
+                  <PrivacyPolicy />
+                </Suspense>
                 <Footer />
               </div>
             } />
             <Route path="/refund-policy" element={
               <div className="min-h-screen bg-background">
                 <Navigation />
-                <RefundPolicy />
+                <Suspense fallback={<PageLoader />}>
+                  <RefundPolicy />
+                </Suspense>
                 <Footer />
               </div>
             } />
