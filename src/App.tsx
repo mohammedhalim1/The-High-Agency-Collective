@@ -3,26 +3,30 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { networkMonitor } from "@/utils/networkMonitor";
 import { AuthProvider } from "@/lib/auth";
+import { lazy, Suspense } from "react";
 import Home from "./pages/Home";
-import About from "./pages/About";
-import Services from "./pages/Services";
-import Contact from "./pages/Contact";
-import Transform from "./pages/Transform";
-import TermsConditions from "./pages/TermsConditions";
-import PrivacyPolicy from "./pages/PrivacyPolicy";
-import RefundPolicy from "./pages/RefundPolicy";
 import Navigation from "./components/Navigation";
 import Footer from "./components/Footer";
-import AdminLayout from "./components/admin/AdminLayout";
-import Dashboard from "./components/admin/Dashboard";
-import HomeEditor from "./components/admin/HomeEditor";
-import AboutEditor from "./components/admin/AboutEditor";
-import ServicesEditor from "./components/admin/ServicesEditor";
-import ContactEditor from "./components/admin/ContactEditor";
-import TransformEditor from "./components/admin/TransformEditor";
-import ProtectedRoute from "./components/admin/ProtectedRoute";
+
+// Lazy load non-critical pages
+const About = lazy(() => import("./pages/About"));
+const Services = lazy(() => import("./pages/Services"));
+const Contact = lazy(() => import("./pages/Contact"));
+const Transform = lazy(() => import("./pages/Transform"));
+const TermsConditions = lazy(() => import("./pages/TermsConditions"));
+const PrivacyPolicy = lazy(() => import("./pages/PrivacyPolicy"));
+const RefundPolicy = lazy(() => import("./pages/RefundPolicy"));
+
+// Lazy load admin components
+const AdminLayout = lazy(() => import("./components/admin/AdminLayout"));
+const Dashboard = lazy(() => import("./components/admin/Dashboard"));
+const HomeEditor = lazy(() => import("./components/admin/HomeEditor"));
+const AboutEditor = lazy(() => import("./components/admin/AboutEditor"));
+const ServicesEditor = lazy(() => import("./components/admin/ServicesEditor"));
+const ContactEditor = lazy(() => import("./components/admin/ContactEditor"));
+const TransformEditor = lazy(() => import("./components/admin/TransformEditor"));
+const ProtectedRoute = lazy(() => import("./components/admin/ProtectedRoute"));
 
 const queryClient = new QueryClient({
   defaultOptions: {
