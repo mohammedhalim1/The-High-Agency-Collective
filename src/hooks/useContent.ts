@@ -21,7 +21,8 @@ export function usePageContent(slug: string) {
       }
 
       try {
-        console.log(`🔍 Fetching content for slug: ${slug}`)
+        console.log(`🔍 FRESH FETCH for slug: ${slug} at ${new Date().toISOString()}`)
+        // Add timestamp to prevent any potential caching at network level
         const { data, error } = await supabase
           .from('pages')
           .select('*')
@@ -34,11 +35,12 @@ export function usePageContent(slug: string) {
         }
 
         if (data) {
-          console.log(`✅ Successfully fetched content for ${slug}`)
-          console.log('Content preview:', {
+          console.log(`✅ FRESH content loaded for ${slug} (updated: ${data.updated_at})`)
+          console.log('Fresh content preview:', {
             slug: data.slug,
             updated_at: data.updated_at,
-            hasContent: !!data.content
+            hasContent: !!data.content,
+            fetchedAt: new Date().toISOString()
           })
         } else {
           console.log(`ℹ️ No content found for ${slug}, will use defaults`)
@@ -50,10 +52,15 @@ export function usePageContent(slug: string) {
         return null
       }
     },
-    staleTime: 0, // Always fetch fresh data
-    cacheTime: 1000 * 60 * 2, // Keep in cache for 2 minutes only
+    // ZERO CACHING - Always fetch fresh data from Supabase
+    staleTime: 0, // Data is immediately stale
+    gcTime: 0, // Don't cache anything (was cacheTime in v4)
+    refetchOnMount: 'always', // Always refetch when component mounts
     refetchOnWindowFocus: true, // Refetch when window gains focus
-    refetchOnMount: true, // Always refetch on component mount
+    refetchOnReconnect: true, // Refetch when network reconnects
+    refetchInterval: false, // Don't auto-refetch on interval
+    retry: 2, // Retry failed requests
+    networkMode: 'always', // Always attempt to fetch
   })
 }
 
