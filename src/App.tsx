@@ -23,7 +23,21 @@ import ContactEditor from "./components/admin/ContactEditor";
 import TransformEditor from "./components/admin/TransformEditor";
 import ProtectedRoute from "./components/admin/ProtectedRoute";
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      // ZERO caching - always fetch fresh data
+      staleTime: 0,
+      gcTime: 0, // Previously cacheTime, now gcTime in v5
+      refetchOnMount: true,
+      refetchOnWindowFocus: true,
+      refetchOnReconnect: true,
+      refetchInterval: false, // Don't auto-refetch on interval
+      retry: 3,
+      retryDelay: attemptIndex => Math.min(1000 * 2 ** attemptIndex, 30000),
+    },
+  },
+});
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
