@@ -64,21 +64,23 @@ const SupabaseDebug = () => {
     if (!supabase) return;
 
     try {
+      const now = new Date();
       const testData = {
         slug: 'home',
         content: {
           test: true,
-          timestamp: new Date().toISOString(),
-          message: 'This is a real-time test update from debug panel',
+          timestamp: now.toISOString(),
+          message: '🚀 FRESH DATA TEST - No caching enabled!',
           hero: {
-            title: "TEST UPDATE - " + new Date().toLocaleTimeString(),
-            subtitle: "If you see this, real-time updates are working!",
-            description: "Updated at " + new Date().toLocaleString()
+            title: "FRESH UPDATE - " + now.toLocaleTimeString(),
+            subtitle: "Zero caching! This should appear IMMEDIATELY!",
+            description: "⚡ Updated at " + now.toLocaleString() + " - Fresh fetch every time!"
           }
-        }
+        },
+        updated_at: now.toISOString()
       };
 
-      console.log('📤 Sending test update:', testData);
+      console.log('📤 Sending FRESH test update:', testData);
 
       const { data, error } = await supabase
         .from('pages')
@@ -90,7 +92,7 @@ const SupabaseDebug = () => {
         toast.error(`Update failed: ${error.message}`);
       } else {
         console.log('✅ Update successful:', data);
-        toast.success('Update test successful! Check the homepage to see if it updated immediately.');
+        toast.success('🚀 FRESH DATA UPDATE! Open homepage in new tab/incognito - should show immediately!');
         // Refresh the table data
         testConnection();
       }
