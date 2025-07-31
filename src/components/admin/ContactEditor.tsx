@@ -237,7 +237,7 @@ export default function ContactEditor(): JSX.Element {
         <CardHeader>
           <CardTitle>Contact Form</CardTitle>
           <CardDescription>
-            Form labels and placeholder text
+            Form labels, placeholder text, and Formspree configuration
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
