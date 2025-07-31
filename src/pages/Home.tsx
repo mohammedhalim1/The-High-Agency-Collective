@@ -6,7 +6,7 @@ import { HomePageContent, Testimonial, createDefaultHomePageContent } from '@/ty
 
 const Home = (): JSX.Element => {
   const { data: pageData, isLoading } = usePageContent('home');
-  const [showVerification, setShowVerification] = useState(false);
+
 
   // Enable real-time updates
   useRealtimeContent('home');
@@ -14,9 +14,7 @@ const Home = (): JSX.Element => {
   // Show verification overlay when 'v' key is pressed
   useEffect(() => {
     const handleKeyPress = (e: KeyboardEvent) => {
-      if (e.key === 'v' && e.ctrlKey) {
-        setShowVerification(prev => !prev);
-      }
+
     };
     window.addEventListener('keydown', handleKeyPress);
     return () => window.removeEventListener('keydown', handleKeyPress);
@@ -49,7 +47,7 @@ const Home = (): JSX.Element => {
 
   return (
     <div className="min-h-screen">
-      <PageFetchVerification slug="home" show={showVerification} />
+
       {/* Hero Section */}
       <section 
         className="relative h-screen flex items-center justify-center text-center bg-cover bg-center"
