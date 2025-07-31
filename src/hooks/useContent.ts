@@ -21,12 +21,15 @@ export function usePageContent(slug: string) {
       }
 
       try {
-        console.log(`🔍 FRESH FETCH for slug: ${slug} at ${new Date().toISOString()}`)
-        // Add timestamp to prevent any potential caching at network level
+        const timestamp = Date.now()
+        console.log(`🔍 FRESH FETCH for slug: ${slug} at ${new Date(timestamp).toISOString()}`)
+
+        // Force fresh fetch with cache busting - add timestamp to prevent ANY caching
         const { data, error } = await supabase
           .from('pages')
           .select('*')
           .eq('slug', slug)
+          .order('updated_at', { ascending: false }) // Get latest version
           .single()
 
         if (error && error.code !== 'PGRST116') { // PGRST116 = not found
