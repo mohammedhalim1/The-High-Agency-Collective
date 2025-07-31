@@ -126,6 +126,43 @@ const SupabaseDebug = () => {
     }
   };
 
+  const testLegalPagesUpdate = async () => {
+    if (!supabase) return;
+
+    try {
+      const now = new Date();
+      const testData = {
+        slug: 'terms-conditions',
+        content: {
+          title: "🚀 FRESH Terms & Conditions - " + now.toLocaleTimeString(),
+          content: "FRESH DATA TEST: Client agrees to these updated terms at " + now.toLocaleString(),
+          sections: [{
+            title: "⚡ Fresh Fetch Test Section",
+            content: "This content was updated at " + now.toISOString() + " and should appear immediately in all browsers!"
+          }]
+        },
+        updated_at: now.toISOString()
+      };
+
+      const { data, error } = await supabase
+        .from('pages')
+        .upsert(testData, { onConflict: 'slug' })
+        .select();
+
+      if (error) {
+        console.error('❌ Legal pages test failed:', error);
+        toast.error(`Legal pages test failed: ${error.message}`);
+      } else {
+        console.log('✅ Legal pages test successful:', data);
+        toast.success('🚀 Legal pages updated! Check /terms-conditions page - should show fresh content immediately!');
+        testConnection();
+      }
+    } catch (error: any) {
+      console.error('❌ Legal pages test error:', error);
+      toast.error(`Legal pages test error: ${error.message}`);
+    }
+  };
+
   useEffect(() => {
     testConnection();
   }, []);
@@ -167,7 +204,7 @@ const SupabaseDebug = () => {
         <div>
           <h3 className="font-semibold mb-2">Environment Check:</h3>
           <ul className="text-sm space-y-1">
-            <li>URL: {import.meta.env.VITE_SUPABASE_URL ? '✅ Set' : '❌ Missing'}</li>
+            <li>URL: {import.meta.env.VITE_SUPABASE_URL ? '��� Set' : '❌ Missing'}</li>
             <li>Key: {import.meta.env.VITE_SUPABASE_ANON_KEY ? '✅ Set' : '❌ Missing'}</li>
             <li>Client Ready: {isSupabaseReady() ? '✅ Yes' : '❌ No'}</li>
           </ul>
