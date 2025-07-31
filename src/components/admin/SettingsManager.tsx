@@ -191,11 +191,21 @@ export default function SettingsManager() {
               value={settings.analytics_id}
               onChange={(e) => handleInputChange('analytics_id', e.target.value)}
               placeholder="G-XXXXXXXXXX or UA-XXXXXXXXX-X"
-              className="mt-1"
+              className={`mt-1 ${
+                settings.analytics_id && !isValidAnalyticsId(settings.analytics_id)
+                  ? 'border-red-300 focus:border-red-500 focus:ring-red-500'
+                  : ''
+              }`}
             />
-            <p className="text-sm text-gray-500 mt-1">
-              Your Google Analytics tracking ID (e.g., G-XXXXXXXXXX)
-            </p>
+            {settings.analytics_id && !isValidAnalyticsId(settings.analytics_id) ? (
+              <p className="text-sm text-red-600 mt-1">
+                Please enter a valid Google Analytics ID (G-XXXXXXXXXX or UA-XXXXXXXXX-X)
+              </p>
+            ) : (
+              <p className="text-sm text-gray-500 mt-1">
+                Your Google Analytics tracking ID (e.g., G-XXXXXXXXXX)
+              </p>
+            )}
           </div>
 
           <div>
@@ -206,11 +216,21 @@ export default function SettingsManager() {
               value={settings.site_domain}
               onChange={(e) => handleInputChange('site_domain', e.target.value)}
               placeholder="example.com"
-              className="mt-1"
+              className={`mt-1 ${
+                settings.site_domain && !isValidDomain(settings.site_domain)
+                  ? 'border-red-300 focus:border-red-500 focus:ring-red-500'
+                  : ''
+              }`}
             />
-            <p className="text-sm text-gray-500 mt-1">
-              Your website's primary domain (without https://)
-            </p>
+            {settings.site_domain && !isValidDomain(settings.site_domain) ? (
+              <p className="text-sm text-red-600 mt-1">
+                Please enter a valid domain (e.g., example.com)
+              </p>
+            ) : (
+              <p className="text-sm text-gray-500 mt-1">
+                Your website's primary domain (without https://)
+              </p>
+            )}
           </div>
         </div>
 
