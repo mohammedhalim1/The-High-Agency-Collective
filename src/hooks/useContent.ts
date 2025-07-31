@@ -56,8 +56,15 @@ export function usePageContent(slug: string) {
         }
 
         return data
-      } catch (error) {
-        console.warn(`⚠️ Failed to fetch content from Supabase for ${slug}:`, error)
+      } catch (error: any) {
+        console.error(`⚠️ Failed to fetch content from Supabase for ${slug}:`, {
+          message: error?.message,
+          code: error?.code,
+          details: error?.details,
+          hint: error?.hint,
+          stack: error?.stack,
+          fullError: error
+        })
         return null
       }
     },
