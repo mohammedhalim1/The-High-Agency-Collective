@@ -43,6 +43,11 @@ export default function SettingsManager() {
         // If no settings record exists, use empty defaults
         if (error.code === 'PGRST116') {
           setSettings({ analytics_id: '', site_domain: '' });
+          setTableExists(true);
+        } else if (error.code === '42P01') {
+          // Table doesn't exist
+          setTableExists(false);
+          setSettings({ analytics_id: '', site_domain: '' });
         } else {
           throw error;
         }
@@ -51,6 +56,7 @@ export default function SettingsManager() {
           analytics_id: data.analytics_id || '',
           site_domain: data.site_domain || ''
         });
+        setTableExists(true);
       }
     } catch (err: any) {
       console.error('Failed to fetch settings:', err);
