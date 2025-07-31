@@ -24,7 +24,20 @@ export const getSupabaseClient = () => {
     try {
       const supabaseUrl = import.meta.env.VITE_SUPABASE_URL
       const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY
-      supabaseClient = createClient(supabaseUrl, supabaseAnonKey)
+
+      // Create client with cache-busting headers
+      supabaseClient = createClient(supabaseUrl, supabaseAnonKey, {
+        global: {
+          headers: {
+            'Cache-Control': 'no-cache, no-store, must-revalidate',
+            'Pragma': 'no-cache',
+            'Expires': '0',
+            'X-Supabase-Cache-Bust': Date.now().toString()
+          }
+        }
+      })
+
+      console.log('✅ Supabase client created with cache-busting headers')
     } catch (error) {
       console.error('Failed to create Supabase client:', error)
       return null
