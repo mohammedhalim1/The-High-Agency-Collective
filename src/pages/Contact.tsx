@@ -34,6 +34,15 @@ const Contact = (): JSX.Element => {
     });
   }
 
+  // Log Formspree configuration
+  const activeFormspreeUrl = content.form?.formspreeUrl || defaultContent.form.formspreeUrl;
+  console.log('📨 Formspree URL configuration:', {
+    fromContent: content.form?.formspreeUrl,
+    fromDefault: defaultContent.form.formspreeUrl,
+    activeUrl: activeFormspreeUrl,
+    isDefault: !content.form?.formspreeUrl
+  });
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
