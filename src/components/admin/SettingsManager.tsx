@@ -41,13 +41,11 @@ const insertAnalyticsScript = (id: string) => {
 
 interface Settings {
   analytics_id: string;
-  site_domain: string;
 }
 
 export default function SettingsManager() {
   const [settings, setSettings] = useState<Settings>({
-    analytics_id: '',
-    site_domain: ''
+    analytics_id: ''
   });
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setSaving] = useState(false);
@@ -67,25 +65,24 @@ export default function SettingsManager() {
 
       const { data, error } = await supabase
         .from('settings')
-        .select('analytics_id, site_domain')
+        .select('analytics_id')
         .single();
 
       if (error) {
         // If no settings record exists, use empty defaults
         if (error.code === 'PGRST116') {
-          setSettings({ analytics_id: '', site_domain: '' });
+          setSettings({ analytics_id: '' });
           setTableExists(true);
         } else if (error.code === '42P01') {
           // Table doesn't exist
           setTableExists(false);
-          setSettings({ analytics_id: '', site_domain: '' });
+          setSettings({ analytics_id: '' });
         } else {
           throw error;
         }
       } else {
         setSettings({
-          analytics_id: data.analytics_id || '',
-          site_domain: data.site_domain || ''
+          analytics_id: data.analytics_id || ''
         });
         setTableExists(true);
       }
@@ -113,7 +110,6 @@ export default function SettingsManager() {
         .upsert({
           id: 1, // Assuming single settings record with id 1
           analytics_id: settings.analytics_id,
-          site_domain: settings.site_domain,
           updated_at: new Date().toISOString()
         }, {
           onConflict: 'id'
@@ -158,11 +154,7 @@ export default function SettingsManager() {
     return /^(G-[A-Z0-9]{10}|UA-\d{4,9}-\d{1,4})$/.test(id);
   };
 
-  // Validate domain format
-  const isValidDomain = (domain: string) => {
-    if (!domain) return true; // Empty is valid
-    return /^[a-zA-Z0-9][a-zA-Z0-9-]*[a-zA-Z0-9]*\.?[a-zA-Z]{2,}$/.test(domain);
-  };
+
 
   // Load settings on component mount
   useEffect(() => {
@@ -214,7 +206,7 @@ export default function SettingsManager() {
               )}
             </CardTitle>
             <CardDescription>
-              Manage your website's global settings and analytics configuration
+              Manage your Google Analytics tracking configuration
             </CardDescription>
           </div>
           <Button
@@ -269,30 +261,7 @@ export default function SettingsManager() {
             )}
           </div>
 
-          <div>
-            <Label htmlFor="site_domain">Website Domain</Label>
-            <Input
-              id="site_domain"
-              type="text"
-              value={settings.site_domain}
-              onChange={(e) => handleInputChange('site_domain', e.target.value)}
-              placeholder="example.com"
-              className={`mt-1 ${
-                settings.site_domain && !isValidDomain(settings.site_domain)
-                  ? 'border-red-300 focus:border-red-500 focus:ring-red-500'
-                  : ''
-              }`}
-            />
-            {settings.site_domain && !isValidDomain(settings.site_domain) ? (
-              <p className="text-sm text-red-600 mt-1">
-                Please enter a valid domain (e.g., example.com)
-              </p>
-            ) : (
-              <p className="text-sm text-gray-500 mt-1">
-                Your website's primary domain (without https://)
-              </p>
-            )}
-          </div>
+
         </form>
 
         <div className="flex items-center justify-between pt-4 border-t">
@@ -317,8 +286,7 @@ export default function SettingsManager() {
               disabled={
                 !hasChanges ||
                 isSaving ||
-                (settings.analytics_id && !isValidAnalyticsId(settings.analytics_id)) ||
-                (settings.site_domain && !isValidDomain(settings.site_domain))
+                (settings.analytics_id && !isValidAnalyticsId(settings.analytics_id))
               }
               className="min-w-[120px]"
             >
