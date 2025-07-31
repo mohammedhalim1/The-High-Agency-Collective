@@ -12,6 +12,7 @@ const Contact = (): JSX.Element => {
     email: '',
     message: ''
   });
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
 
   // Enable real-time updates
