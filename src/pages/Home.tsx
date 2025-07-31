@@ -11,14 +11,7 @@ const Home = (): JSX.Element => {
   // Enable real-time updates
   useRealtimeContent('home');
 
-  // Show verification overlay when 'v' key is pressed
-  useEffect(() => {
-    const handleKeyPress = (e: KeyboardEvent) => {
 
-    };
-    window.addEventListener('keydown', handleKeyPress);
-    return () => window.removeEventListener('keydown', handleKeyPress);
-  }, []);
 
   // Default fallback content
   const defaultContent: HomePageContent = createDefaultHomePageContent();
