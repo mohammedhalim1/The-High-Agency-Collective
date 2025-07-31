@@ -7,9 +7,21 @@ import PageFetchVerification from '@/components/PageFetchVerification';
 
 const Home = (): JSX.Element => {
   const { data: pageData, isLoading } = usePageContent('home');
+  const [showVerification, setShowVerification] = useState(false);
 
   // Enable real-time updates
   useRealtimeContent('home');
+
+  // Show verification overlay when 'v' key is pressed
+  useEffect(() => {
+    const handleKeyPress = (e: KeyboardEvent) => {
+      if (e.key === 'v' && e.ctrlKey) {
+        setShowVerification(prev => !prev);
+      }
+    };
+    window.addEventListener('keydown', handleKeyPress);
+    return () => window.removeEventListener('keydown', handleKeyPress);
+  }, []);
 
   // Default fallback content
   const defaultContent: HomePageContent = createDefaultHomePageContent();
