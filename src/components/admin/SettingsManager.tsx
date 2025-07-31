@@ -128,6 +128,11 @@ export default function SettingsManager() {
     );
   }
 
+  // Show setup instructions if table doesn't exist
+  if (!tableExists) {
+    return <SetupInstructions />;
+  }
+
   return (
     <Card>
       <CardHeader>
