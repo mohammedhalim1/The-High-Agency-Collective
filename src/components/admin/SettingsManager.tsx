@@ -8,6 +8,15 @@ import { supabase } from '@/lib/supabase';
 import { toast } from 'sonner';
 import SetupInstructions from './SetupInstructions';
 
+// Extend the Window interface for TypeScript
+declare global {
+  interface Window {
+    gtagScriptAdded?: boolean;
+    dataLayer?: any[];
+    gtag?: (...args: any[]) => void;
+  }
+}
+
 // Function to dynamically insert Google Analytics script
 const insertAnalyticsScript = (id: string) => {
   if (!window.gtagScriptAdded && id) {
