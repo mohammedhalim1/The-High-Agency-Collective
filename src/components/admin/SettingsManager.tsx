@@ -197,7 +197,15 @@ export default function SettingsManager() {
           </div>
         )}
 
-        <div className="space-y-4">
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            if (hasChanges && !isSaving) {
+              saveSettings();
+            }
+          }}
+          className="space-y-4"
+        >
           <div>
             <Label htmlFor="analytics_id">Google Analytics ID</Label>
             <Input
@@ -247,7 +255,7 @@ export default function SettingsManager() {
               </p>
             )}
           </div>
-        </div>
+        </form>
 
         <div className="flex items-center justify-between pt-4 border-t">
           <div className="flex items-center gap-2 text-sm text-gray-600">
@@ -265,20 +273,23 @@ export default function SettingsManager() {
             )}
           </div>
 
-          <Button
-            onClick={saveSettings}
-            disabled={
-              !hasChanges ||
-              isSaving ||
-              (settings.analytics_id && !isValidAnalyticsId(settings.analytics_id)) ||
-              (settings.site_domain && !isValidDomain(settings.site_domain))
-            }
-            className="min-w-[120px]"
-          >
-            {isSaving && <Loader2 className="h-4 w-4 mr-2 animate-spin" />}
-            <Save className="h-4 w-4 mr-2" />
-            {isSaving ? 'Saving...' : 'Save Changes'}
-          </Button>
+          <div className="flex flex-col gap-2">
+            <Button
+              type="submit"
+              disabled={
+                !hasChanges ||
+                isSaving ||
+                (settings.analytics_id && !isValidAnalyticsId(settings.analytics_id)) ||
+                (settings.site_domain && !isValidDomain(settings.site_domain))
+              }
+              className="min-w-[120px]"
+            >
+              {isSaving && <Loader2 className="h-4 w-4 mr-2 animate-spin" />}
+              <Save className="h-4 w-4 mr-2" />
+              {isSaving ? 'Saving...' : 'Save Changes'}
+            </Button>
+            <p className="text-xs text-gray-500 text-right">Press Ctrl+S to save</p>
+          </div>
         </div>
       </CardContent>
     </Card>
