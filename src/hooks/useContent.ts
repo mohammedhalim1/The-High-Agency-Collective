@@ -33,7 +33,13 @@ export function usePageContent(slug: string) {
           .single()
 
         if (error && error.code !== 'PGRST116') { // PGRST116 = not found
-          console.error(`❌ Supabase error for ${slug}:`, error)
+          console.error(`❌ Supabase error for ${slug}:`, {
+            message: error.message,
+            code: error.code,
+            details: error.details,
+            hint: error.hint,
+            fullError: error
+          })
           throw error
         }
 
