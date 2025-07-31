@@ -283,6 +283,9 @@ const SupabaseDebug = () => {
           <Button onClick={testBasicConnection} variant="outline" disabled={loading}>
             Basic Test
           </Button>
+          <Button onClick={createTable} variant="secondary" size="sm">
+            Create Table
+          </Button>
           <Button onClick={testRealTimeUpdate} variant="outline">
             Test Update
           </Button>
