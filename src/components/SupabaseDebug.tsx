@@ -173,40 +173,63 @@ const SupabaseDebug = () => {
     }
   };
 
-  const testLegalPagesUpdate = async () => {
+  const createTable = async () => {
     if (!supabase) return;
 
     try {
-      const now = new Date();
-      const testData = {
-        slug: 'terms-conditions',
-        content: {
-          title: "🚀 FRESH Terms & Conditions - " + now.toLocaleTimeString(),
-          content: "FRESH DATA TEST: Client agrees to these updated terms at " + now.toLocaleString(),
-          sections: [{
-            title: "⚡ Fresh Fetch Test Section",
-            content: "This content was updated at " + now.toISOString() + " and should appear immediately in all browsers!"
-          }]
-        },
-        updated_at: now.toISOString()
-      };
+      toast.info('Creating pages table...');
 
+      // Note: This requires RLS to be disabled or proper permissions
+      // The SQL command to create the table - this might need to be run manually in Supabase dashboard
+      const createTableSQL = `
+        CREATE TABLE IF NOT EXISTS pages (
+          id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+          slug TEXT UNIQUE NOT NULL,
+          content JSONB,
+          updated_at TIMESTAMPTZ DEFAULT NOW(),
+          created_at TIMESTAMPTZ DEFAULT NOW()
+        );
+
+        -- Create an index on slug for faster queries
+        CREATE INDEX IF NOT EXISTS idx_pages_slug ON pages(slug);
+
+        -- Enable RLS (optional, but recommended)
+        ALTER TABLE pages ENABLE ROW LEVEL SECURITY;
+
+        -- Create a policy that allows all operations (adjust as needed)
+        CREATE POLICY "Allow all operations on pages" ON pages
+          USING (true)
+          WITH CHECK (true);
+      `;
+
+      console.log('SQL to create table:', createTableSQL);
+
+      // Try to create via a simple insert (if table exists, this will work)
       const { data, error } = await supabase
         .from('pages')
-        .upsert(testData, { onConflict: 'slug' })
+        .upsert({
+          slug: 'test-table-creation',
+          content: { test: true, created: new Date().toISOString() }
+        }, { onConflict: 'slug' })
         .select();
 
       if (error) {
-        console.error('❌ Legal pages test failed:', error);
-        toast.error(`Legal pages test failed: ${error.message}`);
+        console.error('❌ Table creation test failed:', error);
+        if (error.code === '42P01') {
+          toast.error('❌ Table does not exist. Please run this SQL in your Supabase dashboard:\n\n' + createTableSQL);
+          setConnectionStatus('❌ Please create pages table manually');
+        } else {
+          toast.error(`Table test failed: ${error.message}`);
+        }
       } else {
-        console.log('✅ Legal pages test successful:', data);
-        toast.success('🚀 Legal pages updated! Check /terms-conditions page - should show fresh content immediately!');
+        console.log('✅ Table exists and insert successful:', data);
+        toast.success('✅ Pages table is working!');
+        setConnectionStatus('✅ Pages table operational');
         testConnection();
       }
     } catch (error: any) {
-      console.error('❌ Legal pages test error:', error);
-      toast.error(`Legal pages test error: ${error.message}`);
+      console.error('❌ Table creation error:', error);
+      toast.error(`Table creation error: ${error.message}`);
     }
   };
 
