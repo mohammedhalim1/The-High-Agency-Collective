@@ -22,15 +22,32 @@ export function usePageContent(slug: string) {
 
       try {
         const timestamp = Date.now()
-        console.log(`🔍 FRESH FETCH for slug: ${slug} at ${new Date(timestamp).toISOString()}`)
+        const fetchId = Math.random().toString(36).substr(2, 9)
+
+        console.group(`🔍 SUPABASE FETCH [${fetchId}] - ${slug}`)
+        console.log('🕐 Start Time:', new Date(timestamp).toISOString())
+        console.log('📍 URL:', import.meta.env.VITE_SUPABASE_URL + '/rest/v1/pages')
+        console.log('🔑 Using Anon Key:', import.meta.env.VITE_SUPABASE_ANON_KEY ? 'Yes' : 'No')
+        console.log('🎯 Target Slug:', slug)
+        console.log('🌐 Browser:', navigator.userAgent.split(' ').pop())
+        console.log('🔄 Network Mode: Fresh fetch (no cache)')
+
+        const startPerformance = performance.now()
 
         // Force fresh fetch with cache busting - add timestamp to prevent ANY caching
-        const { data, error } = await supabase
+        const { data, error, status, statusText, count } = await supabase
           .from('pages')
-          .select('*')
+          .select('*', { count: 'exact' })
           .eq('slug', slug)
           .order('updated_at', { ascending: false }) // Get latest version
           .single()
+
+        const endPerformance = performance.now()
+        const duration = endPerformance - startPerformance
+
+        console.log('⏱️ Request Duration:', `${duration.toFixed(2)}ms`)
+        console.log('📊 Response Status:', status, statusText)
+        console.log('📈 Total Count:', count)
 
         if (error && error.code !== 'PGRST116') { // PGRST116 = not found
           console.error(`❌ Supabase error for ${slug}:`, {
