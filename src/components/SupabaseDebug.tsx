@@ -334,6 +334,27 @@ const SupabaseDebug = () => {
             <li>Client Ready: {isSupabaseReady() ? '✅ Yes' : '❌ No'}</li>
           </ul>
         </div>
+
+        {connectionStatus.includes('❌') && (
+          <div className="bg-red-50 border border-red-200 rounded p-3">
+            <h4 className="font-semibold text-red-800 mb-2">Setup Instructions:</h4>
+            <div className="text-sm text-red-700 space-y-2">
+              <p>1. Ensure your Supabase project is created</p>
+              <p>2. Create a 'pages' table with this SQL:</p>
+              <pre className="bg-red-100 p-2 rounded text-xs overflow-auto">
+{`CREATE TABLE pages (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  slug TEXT UNIQUE NOT NULL,
+  content JSONB,
+  updated_at TIMESTAMPTZ DEFAULT NOW(),
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);`}
+              </pre>
+              <p>3. Disable RLS or create appropriate policies</p>
+              <p>4. Check your environment variables</p>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
