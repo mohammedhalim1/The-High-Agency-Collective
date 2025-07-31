@@ -50,7 +50,12 @@ export const getSupabaseClient = () => {
         }
       })
 
-      console.log('✅ Supabase client created with cache-busting headers')
+      console.log('✅ Supabase client created successfully:', {
+        url: supabaseUrl,
+        keyPrefix: `${supabaseAnonKey.substring(0, 20)}...`,
+        cacheHeaders: 'Enabled',
+        timestamp: new Date().toISOString()
+      })
     } catch (error) {
       console.error('Failed to create Supabase client:', error)
       return null
