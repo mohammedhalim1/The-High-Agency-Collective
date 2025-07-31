@@ -136,17 +136,29 @@ export default function SettingsManager() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="flex items-center gap-2">
-          Site Settings
-          {hasChanges && (
-            <span className="text-sm bg-orange-100 text-orange-700 px-2 py-1 rounded">
-              Unsaved changes
-            </span>
-          )}
-        </CardTitle>
-        <CardDescription>
-          Manage your website's global settings and analytics configuration
-        </CardDescription>
+        <div className="flex items-center justify-between">
+          <div>
+            <CardTitle className="flex items-center gap-2">
+              Site Settings
+              {hasChanges && (
+                <span className="text-sm bg-orange-100 text-orange-700 px-2 py-1 rounded">
+                  Unsaved changes
+                </span>
+              )}
+            </CardTitle>
+            <CardDescription>
+              Manage your website's global settings and analytics configuration
+            </CardDescription>
+          </div>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={fetchSettings}
+            disabled={isLoading}
+          >
+            <RefreshCw className={`h-4 w-4 ${isLoading ? 'animate-spin' : ''}`} />
+          </Button>
+        </div>
       </CardHeader>
       <CardContent className="space-y-6">
         {error && (
