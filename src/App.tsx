@@ -132,17 +132,43 @@ const App = () => (
             } />
 
             {/* Admin Routes */}
-                        <Route path="/admin/*" element={
-              <ProtectedRoute>
-                <AdminLayout />
-              </ProtectedRoute>
+            <Route path="/admin/*" element={
+              <Suspense fallback={<PageLoader />}>
+                <ProtectedRoute>
+                  <AdminLayout />
+                </ProtectedRoute>
+              </Suspense>
             }>
-                                          <Route index element={<Dashboard />} />
-              <Route path="home" element={<HomeEditor />} />
-              <Route path="about" element={<AboutEditor />} />
-              <Route path="services" element={<ServicesEditor />} />
-              <Route path="contact" element={<ContactEditor />} />
-              <Route path="transform" element={<TransformEditor />} />
+              <Route index element={
+                <Suspense fallback={<PageLoader />}>
+                  <Dashboard />
+                </Suspense>
+              } />
+              <Route path="home" element={
+                <Suspense fallback={<PageLoader />}>
+                  <HomeEditor />
+                </Suspense>
+              } />
+              <Route path="about" element={
+                <Suspense fallback={<PageLoader />}>
+                  <AboutEditor />
+                </Suspense>
+              } />
+              <Route path="services" element={
+                <Suspense fallback={<PageLoader />}>
+                  <ServicesEditor />
+                </Suspense>
+              } />
+              <Route path="contact" element={
+                <Suspense fallback={<PageLoader />}>
+                  <ContactEditor />
+                </Suspense>
+              } />
+              <Route path="transform" element={
+                <Suspense fallback={<PageLoader />}>
+                  <TransformEditor />
+                </Suspense>
+              } />
             </Route>
           </Routes>
         </BrowserRouter>
