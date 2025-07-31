@@ -8,6 +8,7 @@ import { supabase } from '@/lib/supabase';
 import { toast } from 'sonner';
 import SetupInstructions from './SetupInstructions';
 import { insertAnalyticsScript } from '@/hooks/useGoogleAnalytics';
+import { Skeleton } from '@/components/ui/skeleton';
 
 interface Settings {
   analytics_id: string;
