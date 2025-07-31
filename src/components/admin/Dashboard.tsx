@@ -16,6 +16,7 @@ import ErrorTest from '@/components/ErrorTest'
 import SupabaseFetchVerification from '@/components/SupabaseFetchVerification'
 import EnvVerification from '@/components/EnvVerification'
 import SupabaseConnectionTest from '@/components/SupabaseConnectionTest'
+import FormspreeTest from '@/components/FormspreeTest'
 
 
 const pages = [
