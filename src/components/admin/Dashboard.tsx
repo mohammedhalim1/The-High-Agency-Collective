@@ -97,6 +97,7 @@ export default function Dashboard() {
       </div>
 
       <div className="mt-8 space-y-6">
+        <ErrorTest />
         <SupabaseDebug />
 
         <Card>
