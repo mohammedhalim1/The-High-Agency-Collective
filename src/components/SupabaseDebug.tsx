@@ -168,7 +168,7 @@ const SupabaseDebug = () => {
         testConnection();
       }
     } catch (error: any) {
-      console.error('��� Clear error:', error);
+      console.error('❌ Clear error:', error);
       toast.error(`Clear error: ${error.message}`);
     }
   };
@@ -229,17 +229,31 @@ const SupabaseDebug = () => {
         console.log('✅ Basic connection successful');
         toast.success('Basic connection works!');
 
-        // Try a simple query to any table
+        // Check if 'pages' table exists
+        console.log('Checking if pages table exists...');
         const { data: testData, error: testError } = await supabase
-          .from('pages')  // assuming this table should exist
+          .from('pages')
           .select('count', { count: 'exact', head: true });
 
         if (testError) {
-          console.error('Table access error:', testError);
-          toast.error(`Table error: ${testError.message}`);
+          console.error('Pages table error:', {
+            message: testError.message,
+            code: testError.code,
+            details: testError.details,
+            hint: testError.hint
+          });
+
+          if (testError.code === '42P01') {
+            toast.error('❌ Pages table does not exist! Need to create it.');
+            setConnectionStatus('❌ Pages table missing - needs to be created');
+          } else {
+            toast.error(`Table error: ${testError.message}`);
+            setConnectionStatus(`❌ Table error: ${testError.message}`);
+          }
         } else {
-          console.log('✅ Table access successful');
-          toast.success('Table access works!');
+          console.log('✅ Pages table exists and accessible');
+          toast.success('✅ Pages table exists!');
+          setConnectionStatus('✅ Pages table accessible');
         }
       }
     } catch (error: any) {
