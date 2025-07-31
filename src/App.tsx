@@ -52,7 +52,11 @@ const PageLoader = () => (
   </div>
 );
 
-const App = () => (
+const App = () => {
+  // Load Google Analytics automatically if configured
+  useGoogleAnalytics();
+
+  return (
   <QueryClientProvider client={queryClient}>
     <AuthProvider>
       <TooltipProvider>
@@ -176,6 +180,7 @@ const App = () => (
       </TooltipProvider>
     </AuthProvider>
   </QueryClientProvider>
-);
+  );
+};
 
 export default App;
