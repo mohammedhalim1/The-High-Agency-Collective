@@ -149,6 +149,19 @@ export function useForceRefresh() {
   }
 }
 
+// Ultra-fresh data hook - forces network fetch on every component mount
+export function useUltraFreshPageContent(slug: string) {
+  const { data, isLoading, error, refetch } = usePageContent(slug);
+
+  useEffect(() => {
+    // Force a fresh fetch on every component mount
+    console.log(`🚀 ULTRA-FRESH: Force fetching fresh data for ${slug}`);
+    refetch();
+  }, [slug, refetch]);
+
+  return { data, isLoading, error, refetch };
+}
+
 // Hook to listen for real-time content changes
 export function useRealtimeContent(slug: string) {
   const queryClient = useQueryClient()
