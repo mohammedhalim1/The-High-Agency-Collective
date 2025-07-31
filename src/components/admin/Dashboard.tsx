@@ -95,7 +95,9 @@ export default function Dashboard() {
         })}
       </div>
 
-      <div className="mt-8">
+      <div className="mt-8 space-y-6">
+        <SupabaseDebug />
+
         <Card>
           <CardHeader>
             <CardTitle>Quick Actions</CardTitle>
