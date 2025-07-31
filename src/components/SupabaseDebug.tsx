@@ -168,7 +168,7 @@ const SupabaseDebug = () => {
         testConnection();
       }
     } catch (error: any) {
-      console.error('❌ Clear error:', error);
+      console.error('��� Clear error:', error);
       toast.error(`Clear error: ${error.message}`);
     }
   };
@@ -207,6 +207,44 @@ const SupabaseDebug = () => {
     } catch (error: any) {
       console.error('❌ Legal pages test error:', error);
       toast.error(`Legal pages test error: ${error.message}`);
+    }
+  };
+
+  const testBasicConnection = async () => {
+    if (!supabase) {
+      toast.error('Supabase client not available');
+      return;
+    }
+
+    try {
+      console.log('🔍 Basic connection test...');
+
+      // Test if we can connect to Supabase at all
+      const { data, error } = await supabase.auth.getSession();
+
+      if (error) {
+        console.error('Auth error:', error);
+        toast.error(`Auth error: ${error.message}`);
+      } else {
+        console.log('✅ Basic connection successful');
+        toast.success('Basic connection works!');
+
+        // Try a simple query to any table
+        const { data: testData, error: testError } = await supabase
+          .from('pages')  // assuming this table should exist
+          .select('count', { count: 'exact', head: true });
+
+        if (testError) {
+          console.error('Table access error:', testError);
+          toast.error(`Table error: ${testError.message}`);
+        } else {
+          console.log('✅ Table access successful');
+          toast.success('Table access works!');
+        }
+      }
+    } catch (error: any) {
+      console.error('Basic test failed:', error);
+      toast.error(`Basic test failed: ${error.message}`);
     }
   };
 
