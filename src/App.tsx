@@ -47,11 +47,7 @@ const queryClient = new QueryClient({
 });
 
 // Loading component for lazy loaded pages
-const PageLoader = () => (
-  <div className="min-h-[60vh] flex items-center justify-center">
-    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
-  </div>
-);
+const PageLoader = () => <PageSkeleton />;
 
 const App = () => {
   // Load Google Analytics automatically if configured
