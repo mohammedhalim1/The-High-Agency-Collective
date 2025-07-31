@@ -226,16 +226,16 @@ const SupabaseDebug = () => {
 
         <div className="flex flex-wrap gap-2">
           <Button onClick={testConnection} disabled={loading}>
-            {loading ? 'Testing...' : 'Test Connection'}
+            {loading ? 'Testing...' : 'Full Test'}
+          </Button>
+          <Button onClick={testBasicConnection} variant="outline" disabled={loading}>
+            Basic Test
           </Button>
           <Button onClick={testRealTimeUpdate} variant="outline">
-            Test Real-time Update
+            Test Update
           </Button>
           <Button onClick={clearTestData} variant="destructive" size="sm">
-            Clear Test Data
-          </Button>
-          <Button onClick={testLegalPagesUpdate} variant="secondary" size="sm">
-            Test Legal Pages
+            Clear Data
           </Button>
         </div>
 
