@@ -17,6 +17,16 @@ const Home = (): JSX.Element => {
   const content: HomePageContent = pageData?.content || defaultContent;
   const testimonials: Testimonial[] = content.testimonials?.items || defaultContent.testimonials.items;
 
+  // Log data source for debugging
+  console.log('🏠 Home page rendering with data from:', pageData ? 'Supabase' : 'default fallback');
+  if (pageData) {
+    console.log('📊 Home data freshness:', {
+      slug: pageData.slug,
+      updated_at: pageData.updated_at,
+      fetched_at: new Date().toISOString()
+    });
+  }
+
   if (isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
