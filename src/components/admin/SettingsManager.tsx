@@ -107,9 +107,23 @@ export default function SettingsManager() {
   const handleInputChange = (field: keyof Settings, value: string) => {
     setSettings(prev => ({
       ...prev,
-      [field]: value
+      [field]: value.trim()
     }));
     setHasChanges(true);
+    // Clear any existing errors when user starts typing
+    if (error) setError(null);
+  };
+
+  // Validate Google Analytics ID format
+  const isValidAnalyticsId = (id: string) => {
+    if (!id) return true; // Empty is valid
+    return /^(G-[A-Z0-9]{10}|UA-\d{4,9}-\d{1,4})$/.test(id);
+  };
+
+  // Validate domain format
+  const isValidDomain = (domain: string) => {
+    if (!domain) return true; // Empty is valid
+    return /^[a-zA-Z0-9][a-zA-Z0-9-]*[a-zA-Z0-9]*\.?[a-zA-Z]{2,}$/.test(domain);
   };
 
   // Load settings on component mount
