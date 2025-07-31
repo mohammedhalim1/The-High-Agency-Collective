@@ -9,6 +9,7 @@ import { useGoogleAnalytics } from "@/hooks/useGoogleAnalytics";
 import Home from "./pages/Home";
 import Navigation from "./components/Navigation";
 import Footer from "./components/Footer";
+import PageSkeleton from "./components/PageSkeleton";
 
 // Lazy load non-critical pages
 const About = lazy(() => import("./pages/About"));
