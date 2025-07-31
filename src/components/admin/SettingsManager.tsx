@@ -150,9 +150,20 @@ export default function SettingsManager() {
   if (isLoading) {
     return (
       <Card>
-        <CardContent className="flex items-center justify-center py-8">
-          <Loader2 className="h-8 w-8 animate-spin text-gray-400" />
-          <span className="ml-3 text-gray-600">Loading settings...</span>
+        <CardHeader>
+          <Skeleton className="h-6 w-32" />
+          <Skeleton className="h-4 w-64" />
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="space-y-2">
+            <Skeleton className="h-4 w-24" />
+            <Skeleton className="h-10 w-full" />
+            <Skeleton className="h-4 w-48" />
+          </div>
+          <div className="flex items-center justify-between pt-4">
+            <Skeleton className="h-4 w-32" />
+            <Skeleton className="h-10 w-24" />
+          </div>
         </CardContent>
       </Card>
     );
