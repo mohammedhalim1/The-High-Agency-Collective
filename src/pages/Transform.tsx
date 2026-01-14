@@ -20,6 +20,16 @@ const Transform = (): JSX.Element => {
   const content: TransformPageContent = pageData?.content || defaultContent;
   const stages: TransformationStage[] = content.stages?.items || defaultContent.stages.items;
 
+  // Log data source for debugging
+  console.log('✨ Transform page rendering with data from:', pageData ? 'Supabase' : 'default fallback');
+  if (pageData) {
+    console.log('📊 Transform data freshness:', {
+      slug: pageData.slug,
+      updated_at: pageData.updated_at,
+      fetched_at: new Date().toISOString()
+    });
+  }
+
   useEffect(() => {
     const handleScroll = () => {
       const scrollTop = window.scrollY;

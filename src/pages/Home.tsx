@@ -7,8 +7,11 @@ import { HomePageContent, Testimonial, createDefaultHomePageContent } from '@/ty
 const Home = (): JSX.Element => {
   const { data: pageData, isLoading } = usePageContent('home');
 
+
   // Enable real-time updates
   useRealtimeContent('home');
+
+
 
   // Default fallback content
   const defaultContent: HomePageContent = createDefaultHomePageContent();
@@ -16,6 +19,16 @@ const Home = (): JSX.Element => {
   // Use content from Supabase or fallback to default
   const content: HomePageContent = pageData?.content || defaultContent;
   const testimonials: Testimonial[] = content.testimonials?.items || defaultContent.testimonials.items;
+
+  // Log data source for debugging
+  console.log('🏠 Home page rendering with data from:', pageData ? 'Supabase' : 'default fallback');
+  if (pageData) {
+    console.log('📊 Home data freshness:', {
+      slug: pageData.slug,
+      updated_at: pageData.updated_at,
+      fetched_at: new Date().toISOString()
+    });
+  }
 
   if (isLoading) {
     return (
@@ -27,6 +40,7 @@ const Home = (): JSX.Element => {
 
   return (
     <div className="min-h-screen">
+
       {/* Hero Section */}
       <section 
         className="relative h-screen flex items-center justify-center text-center bg-cover bg-center"

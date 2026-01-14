@@ -114,6 +114,7 @@ export interface ContactFormSection {
   emailPlaceholder: string
   messagePlaceholder: string
   submitButtonText: string
+  formspreeUrl?: string
 }
 
 export interface BookingSection {

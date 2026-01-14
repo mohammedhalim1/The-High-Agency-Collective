@@ -21,23 +21,97 @@ export function usePageContent(slug: string) {
       }
 
       try {
-        const { data, error } = await supabase
+        const timestamp = Date.now()
+        const fetchId = Math.random().toString(36).substr(2, 9)
+
+        console.group(`🔍 SUPABASE FETCH [${fetchId}] - ${slug}`)
+        console.log('🕐 Start Time:', new Date(timestamp).toISOString())
+        console.log('📍 URL:', import.meta.env.VITE_SUPABASE_URL + '/rest/v1/pages')
+        console.log('🔑 Using Anon Key:', import.meta.env.VITE_SUPABASE_ANON_KEY ? 'Yes' : 'No')
+        console.log('🎯 Target Slug:', slug)
+        console.log('🌐 Browser:', navigator.userAgent.split(' ').pop())
+        console.log('🔄 Network Mode: Fresh fetch (no cache)')
+
+        const startPerformance = performance.now()
+
+        // Force fresh fetch with cache busting - add timestamp to prevent ANY caching
+        const { data, error, status, statusText, count } = await supabase
           .from('pages')
-          .select('*')
+          .select('*', { count: 'exact' })
           .eq('slug', slug)
+          .order('updated_at', { ascending: false }) // Get latest version
           .single()
 
+        const endPerformance = performance.now()
+        const duration = endPerformance - startPerformance
+
+        console.log('⏱️ Request Duration:', `${duration.toFixed(2)}ms`)
+        console.log('📊 Response Status:', status, statusText)
+        console.log('📈 Total Count:', count)
+
         if (error && error.code !== 'PGRST116') { // PGRST116 = not found
+          console.error('❌ SUPABASE ERROR:', {
+            slug,
+            fetchId,
+            message: error.message,
+            code: error.code,
+            details: error.details,
+            hint: error.hint,
+            duration: `${duration.toFixed(2)}ms`,
+            fullError: error
+          })
+          console.groupEnd()
           throw error
         }
 
+        if (data) {
+          console.log('✅ SUCCESS - Data received from Supabase:', {
+            slug: data.slug,
+            id: data.id,
+            updated_at: data.updated_at,
+            created_at: data.created_at,
+            hasContent: !!data.content,
+            contentSize: data.content ? JSON.stringify(data.content).length : 0,
+            contentKeys: data.content ? Object.keys(data.content) : [],
+            fetchedAt: new Date().toISOString(),
+            duration: `${duration.toFixed(2)}ms`
+          })
+          console.log('📄 Raw Content Sample:', data.content ?
+            JSON.stringify(data.content, null, 2).substring(0, 500) + '...' :
+            'No content'
+          )
+        } else {
+          console.log('ℹ️ NO DATA - No content found for slug:', slug)
+          console.log('📝 Will use default fallback content')
+        }
+
+        console.groupEnd()
         return data
-      } catch (error) {
-        console.warn('Failed to fetch content from Supabase:', error)
+      } catch (error: any) {
+        console.group(`💥 FETCH EXCEPTION - ${slug}`)
+        console.error('Exception Details:', {
+          message: error?.message,
+          name: error?.name,
+          code: error?.code,
+          details: error?.details,
+          hint: error?.hint,
+          stack: error?.stack?.split('\n')[0], // First line of stack
+          timestamp: new Date().toISOString()
+        })
+        console.error('Full Error Object:', error)
+        console.groupEnd()
         return null
       }
     },
-    staleTime: 1000 * 60 * 5, // 5 minutes
+    // ZERO CACHING - Always fetch fresh data from Supabase
+    staleTime: 0, // Data is immediately stale
+    gcTime: 0, // Don't cache anything (was cacheTime in v4)
+    refetchOnMount: 'always', // Always refetch when component mounts
+    refetchOnWindowFocus: true, // Refetch when window gains focus
+    refetchOnReconnect: true, // Refetch when network reconnects
+    refetchInterval: false, // Don't auto-refetch on interval
+    retry: 2, // Retry failed requests
+    networkMode: 'always', // Always attempt to fetch
   })
 }
 
@@ -54,7 +128,7 @@ export function useUpdatePageContent() {
       const { data, error } = await supabase
         .from('pages')
         .upsert(
-          { slug, content },
+          { slug, content, updated_at: new Date().toISOString() },
           { onConflict: 'slug' }
         )
         .select()
@@ -64,9 +138,15 @@ export function useUpdatePageContent() {
       return data
     },
     onSuccess: (data) => {
-      // Invalidate and refetch the specific page content
+      // Invalidate and refetch the specific page content AND all related queries
       queryClient.invalidateQueries({ queryKey: ['page-content', data.slug] })
-      toast.success('Content updated successfully!')
+      queryClient.refetchQueries({ queryKey: ['page-content', data.slug] })
+
+      // Also invalidate all page content queries to ensure consistency
+      queryClient.invalidateQueries({ queryKey: ['page-content'] })
+
+      toast.success('Content updated successfully! Changes should appear for all users.')
+      console.log('✅ Content updated and cache invalidated for:', data.slug)
     },
     onError: (error: any) => {
       if (error.message.includes('Supabase is not configured')) {
@@ -105,6 +185,31 @@ export function useAutoSave(slug: string, content: any, delay = 2000) {
   return { lastSaved, isSaving }
 }
 
+// Force refresh all content (useful for debugging)
+export function useForceRefresh() {
+  const queryClient = useQueryClient()
+
+  return () => {
+    console.log('🔄 Force refreshing all content...')
+    queryClient.invalidateQueries({ queryKey: ['page-content'] })
+    queryClient.refetchQueries({ queryKey: ['page-content'] })
+    toast.info('Refreshing all content...')
+  }
+}
+
+// Ultra-fresh data hook - forces network fetch on every component mount
+export function useUltraFreshPageContent(slug: string) {
+  const { data, isLoading, error, refetch } = usePageContent(slug);
+
+  useEffect(() => {
+    // Force a fresh fetch on every component mount
+    console.log(`🚀 ULTRA-FRESH: Force fetching fresh data for ${slug}`);
+    refetch();
+  }, [slug, refetch]);
+
+  return { data, isLoading, error, refetch };
+}
+
 // Hook to listen for real-time content changes
 export function useRealtimeContent(slug: string) {
   const queryClient = useQueryClient()
@@ -127,8 +232,15 @@ export function useRealtimeContent(slug: string) {
             filter: `slug=eq.${slug}`,
           },
           (payload) => {
-            // Invalidate queries when content changes
+            console.log('🔄 Real-time update received for:', slug, payload)
+            // Invalidate and immediately refetch when content changes
             queryClient.invalidateQueries({ queryKey: ['page-content', slug] })
+            queryClient.refetchQueries({ queryKey: ['page-content', slug] })
+
+            // Show a toast notification for real-time updates
+            if (payload.eventType === 'UPDATE') {
+              toast.info('Page content updated! Refreshing...')
+            }
           }
         )
         .subscribe()

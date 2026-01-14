@@ -165,7 +165,8 @@ export function createDefaultContactContent(): ContactPageContent {
       namePlaceholder: "Enter your full name",
       emailPlaceholder: "your.email@example.com",
       messagePlaceholder: "Tell me about what you're experiencing and what kind of support you're looking for...",
-      submitButtonText: "Send Message"
+      submitButtonText: "Send Message",
+      formspreeUrl: "https://formspree.io/f/xvgqqrdl"
     },
     booking: {
       title: "Ready to begin your transformation?",

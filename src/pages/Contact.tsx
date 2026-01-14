@@ -12,6 +12,7 @@ const Contact = (): JSX.Element => {
     email: '',
     message: ''
   });
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
 
   // Enable real-time updates
@@ -23,14 +24,60 @@ const Contact = (): JSX.Element => {
   // Use content from Supabase or fallback to default
   const content: ContactPageContent = pageData?.content || defaultContent;
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    // Here you would typically send the form data to your backend
-    toast({
-      title: "Message sent!",
-      description: "Thank you for reaching out. I'll get back to you within 24 hours.",
+  // Log data source for debugging
+  console.log('📞 Contact page rendering with data from:', pageData ? 'Supabase' : 'default fallback');
+  if (pageData) {
+    console.log('📊 Contact data freshness:', {
+      slug: pageData.slug,
+      updated_at: pageData.updated_at,
+      fetched_at: new Date().toISOString()
     });
-    setFormData({ name: '', email: '', message: '' });
+  }
+
+  // Log Formspree configuration
+  const activeFormspreeUrl = content.form?.formspreeUrl || defaultContent.form.formspreeUrl;
+  console.log('📨 Formspree URL configuration:', {
+    fromContent: content.form?.formspreeUrl,
+    fromDefault: defaultContent.form.formspreeUrl,
+    activeUrl: activeFormspreeUrl,
+    isDefault: !content.form?.formspreeUrl
+  });
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+
+    try {
+      // Get Formspree URL from content or use default
+      const formspreeUrl = content.form?.formspreeUrl || defaultContent.form.formspreeUrl;
+
+      const response = await fetch(formspreeUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (response.ok) {
+        toast({
+          title: "Message sent!",
+          description: "Thank you for reaching out. I'll get back to you within 24 hours.",
+        });
+        setFormData({ name: '', email: '', message: '' });
+      } else {
+        throw new Error('Failed to send message');
+      }
+    } catch (error) {
+      console.error('Form submission error:', error);
+      toast({
+        title: "Error sending message",
+        description: "Please try again or contact us directly via email.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -151,9 +198,11 @@ const Contact = (): JSX.Element => {
 
                 <button
                   type="submit"
-                  className="w-full cta-button text-lg"
+                  disabled={isSubmitting}
+                  className="w-full cta-button text-lg disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                 >
-                  {content.form?.submitButtonText || defaultContent.form.submitButtonText}
+                  {isSubmitting && <Loader2 className="h-5 w-5 animate-spin" />}
+                  {isSubmitting ? 'Sending...' : (content.form?.submitButtonText || defaultContent.form.submitButtonText)}
                 </button>
               </form>
             </div>
